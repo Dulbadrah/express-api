@@ -15,6 +15,7 @@
     "@types/filesystem": "^0.0.36",
     "express": "^5.1.0",
     "fs-extra": "^11.3.0",
+    "nanoid": "^5.1.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   },
