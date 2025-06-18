@@ -29,7 +29,7 @@ userRouter.post("/createUser", (req: Request, res: Response) => {
   users.push({
     name,
     age,
-    userId: 1,
+    userId: uniqueId,
     userName,
     userEmail,
     phoneNumber,
@@ -41,7 +41,7 @@ userRouter.post("/createUser", (req: Request, res: Response) => {
   res.send("Successfully created User");
 });
 
-userRouter.post("/deleteUser", (req: Request, res: Response) => {
+userRouter.post("/deleteUser/:userId", (req: Request, res: Response) => {
   const { userId } = req.body;
   const existingData = fs.readFileSync("./user.json", "utf8");
 
@@ -56,13 +56,14 @@ userRouter.post("/deleteUser", (req: Request, res: Response) => {
   });
 });
 
-userRouter.put("/updateUser/:id", (req: Request, res: Response) => {
+//updateUser
+userRouter.put("/updateUser/:userId", (req: Request, res: Response) => {
   const { name, age, userName, userEmail, phoneNumber }: User = req.body;
-  const { id } = req.params;
+   const { userId } = req.params;
 
   const users = getUsers();
 
-  const foundedUser = users.find((user) => user.userId === Number(id));
+  const foundedUser = users.find((user) => user.userId === userId);
 
   if(!foundedUser) {
     res.json({ success: false, message: "user not found"})
@@ -70,7 +71,7 @@ userRouter.put("/updateUser/:id", (req: Request, res: Response) => {
   }
 
   const updatedUsers = users.map((user: User) => {
-    if (user.userId === Number(id)) {
+    if (user.userId === userId) {
       return { ...user, name, age, userEmail, userName, phoneNumber };
     } 
     
@@ -85,8 +86,8 @@ userRouter.put("/updateUser/:id", (req: Request, res: Response) => {
 //Selectid
 userRouter.get("/getUser/:userId", (req: Request, res: Response) => {
   const { userId } = req.params;
-  const existingData = fs.readFileSync("./user.json", "utf8");
-  const user = JSON.parse(existingData).find(
+  const users = getUsers();
+  const user = users.find(
     (use: any) => use.userId == userId
   );
   if (user) {
@@ -103,7 +104,7 @@ const getUsers = () => {
 
   const users: User[] = JSON.parse(usersJson);
 
-  return users
+  return users;
 };
 
 const updateUsersJson = (users: User[]) => {
