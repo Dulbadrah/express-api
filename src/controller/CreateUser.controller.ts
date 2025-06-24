@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../type/type";
 import fs from "fs-extra";
 
-const createUser=(req: Request, res: Response) => {
+const createUser = (req: Request, res: Response) => {
   const { name, age, userName, userEmail, phoneNumber, password }: User =
     req.body;
 
@@ -32,5 +32,5 @@ const createUser=(req: Request, res: Response) => {
   fs.writeFileSync(filePath, JSON.stringify(users, null, 2));
 
   res.send("Successfully created User");
-}
-export default createUser
+};
+export default createUser;
